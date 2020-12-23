@@ -8,7 +8,10 @@ import Part2.Types
 -- Написать функцию, которая преобразует значение типа
 -- ColorLetter в символ, равный первой букве значения
 prob6 :: ColorLetter -> Char
-prob6 = error "Implement me!"
+prob6 colorLetter = case colorLetter of
+  RED -> 'R'
+  GREEN -> 'G'
+  BLUE -> 'B'
 
 ------------------------------------------------------------
 -- PROBLEM #7
@@ -24,7 +27,11 @@ prob7 = error "Implement me!"
 -- Написать функцию, которая добавляет в соответствующее
 -- поле значения Color значение из ColorPart
 prob8 :: Color -> ColorPart -> Color
-prob8 = error "Implement me!"
+prob8 c cp = case cp of
+    Red cv -> c {red = red c + cv}
+    Green cv -> c {green = green c + cv}
+    Blue cv -> c {blue = blue c + cv}
+
 
 ------------------------------------------------------------
 -- PROBLEM #9
@@ -40,7 +47,10 @@ prob9 = error "Implement me!"
 -- Написать функцию, которая возвращает компонент Color, у
 -- которого наибольшее значение (если такой единственный)
 prob10 :: Color -> Maybe ColorPart
-prob10 = error "Implement me!"
+prob10 (Color r g b) | (r > g) && (r > b) = Just (Red r)
+                     | (g > r) && (g > b) = Just (Green g)
+                     | (b > r) && (b > g) = Just (Blue b)
+                     | otherwise = Nothing
 
 ------------------------------------------------------------
 -- PROBLEM #11
@@ -58,7 +68,14 @@ prob11 = error "Implement me!"
 -- а все элементы правого поддерева -- не меньше элемента
 -- в узле)
 prob12 :: Ord a => Tree a -> Bool
-prob12 = error "Implement me!"
+prob12 tree =  checkBinLeftleftSubTree (left tree) (root tree) && checkBinRightleftSubTree (right tree) (root tree)
+  where 
+    checkBinLeftleftSubTree value  = case value of
+        Nothing -> True
+        Just tree -> root tree < value && prob12 tree
+    checkBinRightleftSubTree value = case value of
+        Nothing -> True
+        Just tree ->  root tree >= value && prob12 tree
 
 ------------------------------------------------------------
 -- PROBLEM #13
@@ -91,7 +108,11 @@ prob15 = error "Implement me!"
 -- Выполнить вращение дерева вправо относительно корня
 -- (https://en.wikipedia.org/wiki/Tree_rotation)
 prob16 :: Tree a -> Tree a
-prob16 = error "Implement me!"
+prob16 tree = maybe tree rightRotation (left tree)
+  where
+    rightRotation leftSubTree = leftSubTree {right = Just oldRoot}
+      where 
+        oldRoot = tree {left = right leftSubTree}
 
 ------------------------------------------------------------
 -- PROBLEM #17

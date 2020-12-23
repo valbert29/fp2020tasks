@@ -15,7 +15,9 @@ module Part1
 --
 -- На вход функции подаются неотрицательные числа
 prob1 :: Int -> Int
-prob1 x = error "Implement me!"
+prob1 x = (x*3+123) `mod` 65537
+
+
 
 
 ------------------------------------------------------------
@@ -25,7 +27,7 @@ prob1 x = error "Implement me!"
 -- * нечётные числа увеличивает втрое и добавляет единицу
 -- * чётные числа делит на два
 prob2 :: Integer -> Integer
-prob2 n = error "Implement me!"
+prob2 n = if even n then n `div` 2 else n * 3 + 1
 
 
 ------------------------------------------------------------
@@ -50,7 +52,11 @@ prob2 n = error "Implement me!"
 --
 -- Для любой функции step и n == 1 ответом будет 0.
 prob3 :: (Integer -> Integer) -> Integer -> Integer
-prob3 step n = error "Implement me!"
+prob3 step n = recurs n 0
+  where
+    recurs :: Integer -> Integer -> Integer
+    recurs 1 counter = counter
+    recurs n counter = recurs (step n) (counter+1)
 
 
 ------------------------------------------------------------

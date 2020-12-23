@@ -5,7 +5,16 @@ module Part3 where
 --
 -- Проверить, является ли число N простым (1 <= N <= 10^9)
 prob18 :: Integer -> Bool
-prob18 = error "Implement me!"
+prob18 n = case n of
+    1 -> False
+    n -> getSimpleDivs n 2 == [n]
+
+getSimpleDivs :: Integer -> Integer -> [Integer]
+getSimpleDivs 1 i = []
+getSimpleDivs n i
+      |i * i > n = [n]
+      |n `mod` i == 0 = i : getSimpleDivs i (n `div` i)
+      |otherwise = getSimpleDivs (succ i) n
 
 ------------------------------------------------------------
 -- PROBLEM #19
@@ -23,7 +32,12 @@ prob19 = error "Implement me!"
 -- Совершенное число равно сумме своих делителей (меньших
 -- самого числа)
 prob20 :: Integer -> Bool
-prob20 = error "Implement me!"
+prob20 n = n == sum (divisors n)
+
+
+-- Делители без самого числа
+divisors :: Integral a => a -> [a]
+divisors n = 1 : filter ((==0) . rem n) [2 .. n `div` 2]
 
 ------------------------------------------------------------
 -- PROBLEM #21
@@ -31,7 +45,7 @@ prob20 = error "Implement me!"
 -- Вернуть список всех делителей числа N (1<=N<=10^10) в
 -- порядке возрастания
 prob21 :: Integer -> [Integer]
-prob21 = error "Implement me!"
+prob21 n = (divisors n) ++ [n]
 
 ------------------------------------------------------------
 -- PROBLEM #22
@@ -39,7 +53,10 @@ prob21 = error "Implement me!"
 -- Подсчитать произведение количеств букв i в словах из
 -- заданной строки (списка символов)
 prob22 :: String -> Integer
-prob22 = error "Implement me!"
+prob22 str = product $ (map count) (words str)
+    where
+      count :: String -> Integer
+      count wght = toInteger $ length (filter(=='i') wght)
 
 ------------------------------------------------------------
 -- PROBLEM #23
@@ -59,7 +76,9 @@ prob23 = error "Implement me!"
 -- представить как сумму чисел от 1 до какого-то K
 -- (1 <= N <= 10^10)
 prob24 :: Integer -> Bool
-prob24 = error "Implement me!"
+prob24 num = checkNum(sqrt (1 + 8 * fromInteger num)) == 0
+  where
+    checkNum x = x - fromIntegral (floor x)
 
 ------------------------------------------------------------
 -- PROBLEM #25
@@ -76,7 +95,7 @@ prob25 = error "Implement me!"
 -- сумма делителей одного (без учёта самого числа) равна
 -- другому, и наоборот
 prob26 :: Integer -> Integer -> Bool
-prob26 = error "Implement me!"
+prob26 m n = sum (divisors m) == n && sum (divisors n) == m 
 
 ------------------------------------------------------------
 -- PROBLEM #27
@@ -93,7 +112,7 @@ prob27 = error "Implement me!"
 -- заданному.
 -- Длина списка не превосходит 500
 prob28 :: Int -> [Int] -> Maybe (Int, Int, Int, Int)
-prob28 = error "Implement me!"
+prob28 num eq = error "Implement me!"
 
 ------------------------------------------------------------
 -- PROBLEM #29
