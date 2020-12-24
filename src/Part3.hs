@@ -86,7 +86,9 @@ prob24 num = checkNum(sqrt (1 + 8 * fromInteger num)) == 0
 -- Проверить, что запись числа является палиндромом (т.е.
 -- читается одинаково слева направо и справа налево)
 prob25 :: Integer -> Bool
-prob25 = error "Implement me!"
+prob25 = isPalindrome . show
+  where
+    isPalindrome xs = xs == reverse xs
 
 ------------------------------------------------------------
 -- PROBLEM #26
@@ -128,7 +130,11 @@ prob29 k = error "Implement me!"
 -- Найти наименьшее треугольное число, у которого не меньше
 -- заданного количества делителей
 prob30 :: Int -> Integer
-prob30 = error "Implement me!"
+prob30 k = head (filter (\t -> length (divisors t) >= k) triNums)
+
+-- Генератор треугольных чисел
+triNums :: [Integer]
+triNums = map (\n -> n * (n + 1) `div` 2) [0..]
 
 ------------------------------------------------------------
 -- PROBLEM #31
