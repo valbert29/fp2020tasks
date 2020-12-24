@@ -20,6 +20,7 @@ import Control.Applicative
 -- Написать экземпляр класса Functor для Parser
 -- (удовлетворяющий законам)
 instance Functor Parser where
+    fmap f x = Parser (map (fmap f) . runParser x)
 ------------------------------------------------------------
 -- PROBLEM #34
 --

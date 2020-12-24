@@ -1,20 +1,22 @@
 module Part3 where
 
+import Data.List (nub, sort)
 ------------------------------------------------------------
 -- PROBLEM #18
 --
 -- Проверить, является ли число N простым (1 <= N <= 10^9)
 prob18 :: Integer -> Bool
-prob18 n = case n of
-    1 -> False
-    n -> getSimpleDivs n 2 == [n]
+prob18 n = getDivs n == [n]
 
-getSimpleDivs :: Integer -> Integer -> [Integer]
-getSimpleDivs 1 i = []
-getSimpleDivs n i
-      |i * i > n = [n]
-      |n `mod` i == 0 = i : getSimpleDivs i (n `div` i)
-      |otherwise = getSimpleDivs (succ i) n
+getDivs :: Integer -> [Integer]
+getDivs  = getCurrentDivs 2
+  where
+    getCurrentDivs :: Integer -> Integer -> [Integer]
+    getCurrentDivs _ 1 = []
+    getCurrentDivs divisor n 
+      |divisor * divisor > n = [n]
+      |mod n divisor == 0 = divisor : getCurrentDivs divisor (div n divisor)
+      |otherwise = getCurrentDivs (succ divisor) n
 
 ------------------------------------------------------------
 -- PROBLEM #19
@@ -37,7 +39,11 @@ prob20 n = n == sum (divisors n)
 
 -- Делители без самого числа
 divisors :: Integral a => a -> [a]
-divisors n = 1 : filter ((==0) . rem n) [2 .. n `div` 2]
+divisors n = (l++) $ nub
+  $ concat [[x, n `div` x] | x <- [2..floor . sqrt $ fromIntegral n],
+  n `mod` x == 0]
+    where
+      l = if n == 1 then [] else [1]
 
 ------------------------------------------------------------
 -- PROBLEM #21
@@ -45,7 +51,7 @@ divisors n = 1 : filter ((==0) . rem n) [2 .. n `div` 2]
 -- Вернуть список всех делителей числа N (1<=N<=10^10) в
 -- порядке возрастания
 prob21 :: Integer -> [Integer]
-prob21 n = (divisors n) ++ [n]
+prob21 n = (sort . divisors) n ++ [n]
 
 ------------------------------------------------------------
 -- PROBLEM #22
@@ -130,7 +136,7 @@ prob29 k = error "Implement me!"
 -- Найти наименьшее треугольное число, у которого не меньше
 -- заданного количества делителей
 prob30 :: Int -> Integer
-prob30 k = head (filter (\t -> length (divisors t) >= k) triNums)
+prob30 n = head (filter (\x -> length (divisors x) >= n) triNums)
 
 -- Генератор треугольных чисел
 triNums :: [Integer]

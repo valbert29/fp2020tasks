@@ -74,7 +74,14 @@ prob3 step n = recurs n 0
 --
 -- Число n по модулю не превосходит 10^5
 prob4 :: Integer -> Integer
-prob4 n = error "Implement me!"
+prob4 n
+  | n == (-1) = 0
+  | n < 0 = prob4 (-n - 2) * (if even n then 1 else -1)
+  | otherwise = iter n 0 1
+  
+iter :: Integer -> Integer -> Integer -> Integer
+iter 0 x y = y
+iter i x y = iter (i - 1) y (x + y)
 
 
 ------------------------------------------------------------

@@ -101,7 +101,11 @@ prob14 = error "Implement me!"
 -- Выполнить вращение дерева влево относительно корня
 -- (https://en.wikipedia.org/wiki/Tree_rotation)
 prob15 :: Tree a -> Tree a
-prob15 = error "Implement me!"
+prob15 tree = maybe tree lftRt (right tree)
+  where
+    lftRt subtree = subtree {left = Just oldTree}
+      where 
+        oldTree = tree {right = left subtree}
 
 ------------------------------------------------------------
 -- PROBLEM #16
@@ -109,11 +113,11 @@ prob15 = error "Implement me!"
 -- Выполнить вращение дерева вправо относительно корня
 -- (https://en.wikipedia.org/wiki/Tree_rotation)
 prob16 :: Tree a -> Tree a
-prob16 tree = maybe tree rightRotation (left tree)
+prob16 tree = maybe tree rghtRt (left tree)
   where
-    rightRotation leftSubTree = leftSubTree {right = Just oldRoot}
+    rghtRt subtree = subtree {right = Just oldTree}
       where 
-        oldRoot = tree {left = right leftSubTree}
+        oldTree = tree {left = right subtree}
 
 ------------------------------------------------------------
 -- PROBLEM #17
