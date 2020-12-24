@@ -93,4 +93,11 @@ iter i x y = iter (i - 1) y (x + y)
 -- Числа n и k положительны и не превосходят 10^8.
 -- Число 1 не считается простым числом
 prob5 :: Integer -> Integer -> Bool
-prob5 = error "Implement me!"
+prob5 n k = all (< k) (getSimpleDividers n 2)
+ 
+getSimpleDividers :: Integer -> Integer -> [Integer]
+getSimpleDividers 1 i = []
+getSimpleDividers n i
+  | i * i > n = [n]
+  | n `mod` i == 0 = [i] ++ getSimpleDividers (n `div` i) i
+  | otherwise = getSimpleDividers n (i + 1)

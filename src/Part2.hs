@@ -19,7 +19,12 @@ prob6 colorLetter = case colorLetter of
 -- Написать функцию, которая проверяет, что значения
 -- находятся в диапазоне от 0 до 255 (границы входят)
 prob7 :: ColorPart -> Bool
-prob7 = error "Implement me!"
+prob7 p = (getDataValue p) <= 255 && (getDataValue p) >= 0
+ 
+getDataValue :: ColorPart -> Int
+getDataValue (Red int) = int
+getDataValue (Green int) = int
+getDataValue (Blue int) = int
 
 ------------------------------------------------------------
 -- PROBLEM #8
@@ -39,7 +44,7 @@ prob8 c cp = case cp of
 -- Написать функцию, которая возвращает значение из
 -- ColorPart
 prob9 :: ColorPart -> Int
-prob9 = error "Implement me!"
+prob9 cp = getDataValue cp
 
 ------------------------------------------------------------
 -- PROBLEM #10
@@ -57,7 +62,10 @@ prob10 (Color r g b) | (r > g) && (r > b) = Just (Red r)
 --
 -- Найти сумму элементов дерева
 prob11 :: Num a => Tree a -> a
-prob11 = error "Implement me!"
+prob11 tree = root tree + sumof (left tree) + sumof (right tree)
+  where
+    sumof Nothing = 0
+    sumof (Just x) = prob11 x
 
 ------------------------------------------------------------
 -- PROBLEM #12
@@ -85,7 +93,14 @@ checkLeft (Just tree) parent = root tree < parent && checkLeft (left tree) (root
 -- поддерево, в корне которого находится значение, если оно
 -- есть в дереве поиска; если его нет - вернуть Nothing
 prob13 :: Ord a => a -> Tree a -> Maybe (Tree a)
-prob13 = error "Implement me!"
+prob13 n tree = subRec n (Just tree)
+  where
+    subRec :: Ord a => a -> Maybe (Tree a) -> Maybe (Tree a)
+    subRec _ Nothing = Nothing
+    subRec n (Just (Tree l root r))
+      | n == root = (Just (Tree l root r))
+      | n < root = subRec n l
+      | n > root = subRec n r
 
 ------------------------------------------------------------
 -- PROBLEM #14
@@ -93,7 +108,16 @@ prob13 = error "Implement me!"
 -- Заменить () на числа в порядке обхода "правый, левый,
 -- корень", начиная с 1
 prob14 :: Tree () -> Tree Int
-prob14 = error "Implement me!"
+prob14 t = case enumerate (Just t) 1 of
+    (Just enumerated, _) -> enumerated
+ 
+enumerate :: Maybe (Tree ()) -> Int -> (Maybe (Tree Int), Int)
+enumerate Nothing i = (Nothing, i)
+enumerate (Just (Tree l () r)) i = (Just $ Tree l' current r', current + 1)
+    where
+        (r', afterRight) = enumerate r i
+        (l', afterLeft) = enumerate l afterRight
+        current = afterLeft
 
 ------------------------------------------------------------
 -- PROBLEM #15
