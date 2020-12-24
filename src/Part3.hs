@@ -152,9 +152,10 @@ prob31 = error "Implement me!"
 -- указанного достоинства
 -- Сумма не превосходит 100
 prob32 :: [Int] -> Int -> [[Int]]
-prob32 coins sum = if sum < minimum coins then []
-  else
-    [coin : next 
-      | coin <- reverse coins, 
-        next <- []:prob32 (filter (<= coin) coins) (sum - coin),
-        sum (coin:next)== sum]
+
+prob32 coins 0 = [[]]
+prob32 coins sum
+  | sum < 0 || null coins = []
+  | c == sum = [[c]]
+  | otherwise = prob32 cs sum ++ map (\x -> x ++ [c]) (prob32 coins (sum - c))
+  where (c:cs) = coins
