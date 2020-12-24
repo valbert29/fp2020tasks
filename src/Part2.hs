@@ -68,14 +68,15 @@ prob11 = error "Implement me!"
 -- а все элементы правого поддерева -- не меньше элемента
 -- в узле)
 prob12 :: Ord a => Tree a -> Bool
-prob12 tree =  checkBinLeftleftSubTree (left tree) (root tree) && checkBinRightleftSubTree (right tree) (root tree)
-  where 
-    checkBinLeftleftSubTree value  = case value of
-        Nothing -> True
-        Just tree -> root tree < value && prob12 tree
-    checkBinRightleftSubTree value = case value of
-        Nothing -> True
-        Just tree ->  root tree >= value && prob12 tree
+prob12 tree = checkRight (right tree) (root tree) && checkLeft (left tree) (root tree)
+
+checkRight :: Ord a => Maybe (Tree a) -> a -> Bool
+checkRight Nothing x = True
+checkRight (Just tree) parent = root tree >= parent && checkLeft (left tree) (root tree) && checkRight (right tree) (root tree)
+
+checkLeft :: Ord a => Maybe (Tree a) -> a -> Bool
+checkLeft Nothing x = True
+checkLeft (Just tree) parent = root tree < parent && checkLeft (left tree) (root tree) && checkRight (right tree) (root tree)
 
 ------------------------------------------------------------
 -- PROBLEM #13
