@@ -1,22 +1,14 @@
 module Part3 where
 
-import Data.List (nub, sort)
+import Data.List (nub, sort, delete, group)
 ------------------------------------------------------------
 -- PROBLEM #18
 --
 -- Проверить, является ли число N простым (1 <= N <= 10^9)
 prob18 :: Integer -> Bool
-prob18 n = getDivs n == [n]
-
-getDivs :: Integer -> [Integer]
-getDivs  = getCurrentDivs 2
-  where
-    getCurrentDivs :: Integer -> Integer -> [Integer]
-    getCurrentDivs _ 1 = []
-    getCurrentDivs divisor n 
-      |divisor * divisor > n = [n]
-      |mod n divisor == 0 = divisor : getCurrentDivs divisor (div n divisor)
-      |otherwise = getCurrentDivs (succ divisor) n
+prob18 k = if k > 1
+           then null [ x | x <- [2..k - 1], k `mod` x == 0]
+           else False
 
 ------------------------------------------------------------
 -- PROBLEM #19
@@ -25,7 +17,7 @@ getDivs  = getCurrentDivs 2
 -- разложении числа N (1 <= N <= 10^9). Простые делители
 -- должны быть расположены по возрастанию
 prob19 :: Integer -> [(Integer, Int)]
-prob19 = error "Implement me!"
+prob19 k = map (\divs -> (head divs, length divs)) (group ([x | x <- [2..k - 1], k `mod` x == 0 && null [a | a <- [2..x - 1], x `mod` a == 0]]))
 
 ------------------------------------------------------------
 -- PROBLEM #20
@@ -111,7 +103,11 @@ prob26 m n = sum (divisors m) == n && sum (divisors n) == m
 -- Найти в списке два числа, сумма которых равна заданному.
 -- Длина списка не превосходит 500
 prob27 :: Int -> [Int] -> Maybe (Int, Int)
-prob27 = error "Implement me!"
+prob27 n list = first [(x, y)| x <- list, y <- delete x list, x + y == n]
+ 
+first :: [a] -> Maybe a
+first []     = Nothing
+first (x:xs) = Just x
 
 ------------------------------------------------------------
 -- PROBLEM #28
@@ -120,7 +116,7 @@ prob27 = error "Implement me!"
 -- заданному.
 -- Длина списка не превосходит 500
 prob28 :: Int -> [Int] -> Maybe (Int, Int, Int, Int)
-prob28 num eq = error "Implement me!"
+prob28 n list = first [(v, x, y, z) | x <- list, y <- delete x list, z <- delete y (delete x list), v <- delete z (delete y (delete x list)), x + y + z + v == n]
 
 ------------------------------------------------------------
 -- PROBLEM #29
@@ -128,7 +124,12 @@ prob28 num eq = error "Implement me!"
 -- Найти наибольшее число-палиндром, которое является
 -- произведением двух K-значных (1 <= K <= 3)
 prob29 :: Int -> Int
-prob29 k = error "Implement me!"
+prob29 k = maximum [x * y|
+    x <- [minNumber..maxNumber], y <-[minNumber..maxNumber],
+    (prob25 . toInteger) (x*y)]
+      where
+        minNumber = 10 ^ (k - 1)
+        maxNumber = 10 ^ k - 1
 
 ------------------------------------------------------------
 -- PROBLEM #30
@@ -136,11 +137,7 @@ prob29 k = error "Implement me!"
 -- Найти наименьшее треугольное число, у которого не меньше
 -- заданного количества делителей
 prob30 :: Int -> Integer
-prob30 n = head (filter (\x -> length (divisors x) >= n) triNums)
-
--- Генератор треугольных чисел
-triNums :: [Integer]
-triNums = map (\n -> n * (n + 1) `div` 2) [0..]
+prob30 k = head (filter (\t -> length ([x | x <- [1..t], t `mod` x == 0]) >= k) (map (\n -> n * (n + 1) `div` 2) [0..]))
 
 ------------------------------------------------------------
 -- PROBLEM #31
@@ -148,7 +145,7 @@ triNums = map (\n -> n * (n + 1) `div` 2) [0..]
 -- Найти сумму всех пар различных дружественных чисел,
 -- меньших заданного N (1 <= N <= 10000)
 prob31 :: Int -> Int
-prob31 = error "Implement me!"
+prob31 n = sum [x + y |x <- [1 .. n],y <- [x+1 .. n], prob26 (toInteger x) (toInteger y)]
 
 ------------------------------------------------------------
 -- PROBLEM #32
