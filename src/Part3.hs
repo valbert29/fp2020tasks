@@ -25,7 +25,16 @@ getDivs  = getCurrentDivs 2
 -- разложении числа N (1 <= N <= 10^9). Простые делители
 -- должны быть расположены по возрастанию
 prob19 :: Integer -> [(Integer, Int)]
-prob19 k = map (\divs -> (head divs, length divs)) (group ([x | x <- [2..k - 1], k `mod` x == 0 && null [a | a <- [2..x - 1], x `mod` a == 0]]))
+prob19 n = map (\divs -> (head divs, length divs)) (group (getPrimeDividers n))
+
+getPrimeDividers :: Integer -> [Integer]
+getPrimeDividers  = primeDividers 2
+  where
+    primeDividers :: Integer -> Integer -> [Integer]
+    primeDividers _ 1 = []
+    primeDividers divider n | divider * divider > n = [n]
+                            | n mod divider == 0 = divider : primeDividers divider (n div divider)
+                            | otherwise = primeDividers (succ divider) n
 
 ------------------------------------------------------------
 -- PROBLEM #20
